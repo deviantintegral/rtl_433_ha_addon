@@ -1,0 +1,17 @@
+{
+  "name": "rtl_433",
+  "version": "0.1",
+  "slug": "rtl_433",
+  "description": "Capture rtl_433 radio data and send it to Home Assistant via MQTT",
+  "arch": ["armhf", "armv7", "aarch64", "amd64", "i386"],
+  "startup": "application",
+  "boot": "auto",
+  "usb": true,
+  "udev": true,
+  "options": {
+    "rtl_433_arguments": "-f 433"
+  },
+  "schema": {
+    "rtl_433_arguments": "str"
+  }
+}
