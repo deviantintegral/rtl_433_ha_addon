@@ -2,6 +2,9 @@
 
 import paho.mqtt.client as mqtt
 import json
+import os
+import sys
+from requests import get
 
 #  function
 def connect_msg():
@@ -41,8 +44,22 @@ client = mqtt.Client()
 #client.on_publish = publish_msg
 
 # Connect to broker
-client.username_pw_set("TBD", "TBD")
-client.connect("homeassistant.lan", 1883)
+
+supervisor_token = os.environ['SUPERVISOR_TOKEN']
+base_uri = "http://supervisor"
+headers = {
+    "Authorization": "Bearer " + supervisor_token,
+    "Content-Type": "application/json",
+}
+
+mqtt_response = get(base_uri + "/services/mqtt", headers=headers)
+if (mqtt_response.status_code != 200):
+    # print("Unable to fetch mqtt configuration. Is the addon running?")
+    sys.exit(1)
+
+mqtt_info = mqtt_response.json()["data"]
+client.username_pw_set(mqtt_info["username"], mqtt_info["password"])
+client.connect(mqtt_info["host"], mqtt_info["port"])
 
 ret = client.subscribe('rtl_433/#')
 client.on_message = on_msg

@@ -36,7 +36,7 @@ RUN apk add --no-cache libusb librtlsdr
 WORKDIR /root
 COPY --from=builder /build/root/ /
 
-RUN pip install paho-mqtt
+RUN pip install paho-mqtt requests
 COPY discovery_proxy.py /
 RUN chmod a+x /discovery_proxy.py
 

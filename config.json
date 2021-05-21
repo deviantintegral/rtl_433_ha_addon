@@ -8,6 +8,8 @@
   "boot": "auto",
   "usb": true,
   "udev": true,
+  "services": ["mqtt:want"],
+  "stage": "experimental",
   "options": {
     "rtl_433_arguments": "-f 433"
   },
