@@ -29,19 +29,17 @@ FROM $BUILD_FROM
 ENV LANG C.UTF-8
 
 ARG rtl433GitRevision=master
-LABEL maintainer="georgedot@gmail.com" \
+LABEL maintainer="deviantintegral@gmail.com" \
     vcs-ref="${rtl433GitRevision}"
 
-RUN apk add --no-cache libusb librtlsdr
+RUN apk add --no-cache libusb \
+    librtlsdr \
+    expect
 WORKDIR /root
 COPY --from=builder /build/root/ /
+COPY --from=builder /build/rtl_433/examples/rtl_433_mqtt_hass.py /usr/local/bin
 
 RUN pip install paho-mqtt requests
-COPY discovery_proxy.py /
-RUN chmod a+x /discovery_proxy.py
 
 # Copy data for add-on
-COPY run.sh /
-RUN chmod a+x /run.sh
-
-CMD [ "/run.sh" ]
+COPY rootfs /

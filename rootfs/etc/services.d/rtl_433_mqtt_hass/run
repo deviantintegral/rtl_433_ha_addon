@@ -5,7 +5,6 @@ declare password
 declare port
 declare username
 declare config_path
-declare rtl_433_arguments
 
 config_path=/data/options.json
 
@@ -19,10 +18,4 @@ else
     exit 1
 fi
 
-#rtl_433_arguments=$("$rtl_433_arguments") "$(bashio::config 'rtl_433_arguments')"
-rtl_433_arguments="-F mqtt://$host:$port,user=$username,pass=$password"
-
-/discovery_proxy.py&
-
-echo /usr/local/bin/rtl_433 $rtl_433_arguments
-/usr/local/bin/rtl_433 $rtl_433_arguments
+/usr/bin/with-contenv /usr/local/bin/python -u /usr/local/bin/rtl_433_mqtt_hass.py -u $username -P $password -H $host -p $port -r -f 2>&1

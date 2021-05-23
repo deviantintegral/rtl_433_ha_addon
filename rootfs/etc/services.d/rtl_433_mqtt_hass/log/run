@@ -1,0 +1,3 @@
+#!/bin/sh
+
+unbuffer -p sed "s/^/[rtl_433_mqtt_hass] /g"

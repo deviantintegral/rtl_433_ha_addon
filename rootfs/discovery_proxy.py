@@ -1,4 +1,4 @@
-#!/usr/bin/with-contenv python
+#!/usr/local/bin/python -u
 
 import paho.mqtt.client as mqtt
 import json
@@ -45,6 +45,7 @@ client = mqtt.Client()
 
 # Connect to broker
 
+print("Fetching mqtt connection information...")
 supervisor_token = os.environ['SUPERVISOR_TOKEN']
 base_uri = "http://supervisor"
 headers = {
@@ -54,12 +55,14 @@ headers = {
 
 mqtt_response = get(base_uri + "/services/mqtt", headers=headers)
 if (mqtt_response.status_code != 200):
-    # print("Unable to fetch mqtt configuration. Is the addon running?")
+    print("Unable to fetch mqtt configuration. Is the mqtt addon running?")
     sys.exit(1)
 
 mqtt_info = mqtt_response.json()["data"]
+print("Connecting to mqtt server at " + mqtt_info["host"] + ":" + mqtt_info["port"])
 client.username_pw_set(mqtt_info["username"], mqtt_info["password"])
 client.connect(mqtt_info["host"], mqtt_info["port"])
+print("Connected to " + mqtt_info["host"])
 
 ret = client.subscribe('rtl_433/#')
 client.on_message = on_msg
