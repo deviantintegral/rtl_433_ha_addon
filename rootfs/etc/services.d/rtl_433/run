@@ -5,6 +5,7 @@ declare password
 declare port
 declare username
 declare config_path
+declare retain
 declare rtl_433_arguments
 
 config_path=/data/options.json
@@ -14,12 +15,13 @@ if bashio::services.available "mqtt"; then
     password=$(bashio::services "mqtt" "password")
     port=$(bashio::services "mqtt" "port")
     username=$(bashio::services "mqtt" "username")
+    retain=$(bashio::config "retain")
 else
     bashio::log.info "mqtt is not available"
     exit 1
 fi
 
-#rtl_433_arguments=$("$rtl_433_arguments") "$(bashio::config 'rtl_433_arguments')"
-rtl_433_arguments="-M newmodel -C si -F mqtt://$host:$port,user=$username,pass=$password,retain=1"
+rtl_433_arguments="-M newmodel -C si -F mqtt://$host:$port,user=$username,pass=$password,retain=$retain"
+rtl_433_arguments=$rtl_433_arguments" "$(bashio::config 'rtl_433_arguments')
 
 /usr/local/bin/rtl_433 $rtl_433_arguments 2>&1 | sed 's/^/[rtl_433] /'

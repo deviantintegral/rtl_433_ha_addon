@@ -11,9 +11,11 @@
   "services": ["mqtt:want"],
   "stage": "experimental",
   "options": {
-    "rtl_433_arguments": "-f 433"
+    "rtl_433_arguments": "",
+    "retain": true
   },
   "schema": {
-    "rtl_433_arguments": "str"
+    "rtl_433_arguments": "str?",
+    "retain": "bool"
   }
 }
